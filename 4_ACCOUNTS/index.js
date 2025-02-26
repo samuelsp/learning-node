@@ -68,6 +68,7 @@ function operation() {
           "Criar conta",
           "Consultar saldo",
           "Depositar",
+          "Transferir",
           "Sacar",
           "Sair",
         ],
@@ -83,6 +84,8 @@ function operation() {
         getAccountBalance();
       } else if (action === "Sacar") {
         withDraw();
+      } else if (action === "Transferir") {
+        transfer();
       } else if (action === "Sair") {
         console.log(chalk.bgBlue.black("Obrigado por usar o nosso banco!"));
         process.exit();
@@ -90,6 +93,59 @@ function operation() {
     })
     .catch((error) => {
       console.log(error);
+    });
+}
+
+function transfer() {
+  inquirer
+    .prompt([
+      {
+        name: "accountName",
+        message: "Digite o nome da sua conta:",
+      },
+    ])
+    .then((answer) => {
+      const accountName = answer["accountName"];
+      if (!checkAccount(accountName)) {
+        console.log(chalk.bgRed.black("Esta conta não existe."));
+        return transfer();
+      }
+      inquirer
+        .prompt([
+          {
+            name: "amount",
+            message: "Quanto deseja transferir:",
+          },
+          {
+            name: "destinationAccount",
+            message: "Digite o nome da conta de destino:",
+          },
+        ])
+        .then((answer) => {
+          const amount = answer["amount"];
+          const destinationAccount = answer["destinationAccount"];
+          if (!checkAccount(destinationAccount)) {
+            console.log(chalk.bgRed.black("Conta de destino não existe."));
+            return transfer();
+          }
+          addAmount(destinationAccount, amount, false);
+          removeAmount(accountName, amount, false);
+
+          console.log(
+            chalk.green(
+              `Foi transferido o valor de R$${amount} para a conta ${destinationAccount}!`
+            )
+          );
+          console.log(chalk.green("Transferência realizada com sucesso!"));
+
+          operation();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -136,7 +192,7 @@ function checkAccount(accountName) {
   return true;
 }
 
-function addAmount(accountName, amount) {
+function addAmount(accountName, amount, message = true) {
   const accountData = getAccount(accountName);
   if (!amount) {
     console.log(
@@ -155,9 +211,11 @@ function addAmount(accountName, amount) {
     }
   );
 
-  console.log(
-    chalk.green(`Foi depositado o valor de R$${amount} na sua conta!`)
-  );
+  if (message) {
+    console.log(
+      chalk.green(`Foi depositado o valor de R$${amount} na sua conta!`)
+    );
+  }
 }
 
 function getAccount(accountName) {
@@ -230,7 +288,7 @@ function withDraw() {
     });
 }
 
-function removeAmount(accountName, amount) {
+function removeAmount(accountName, amount, message = true) {
   const accountData = getAccount(accountName);
   if (!amount) {
     console.log(
@@ -251,7 +309,10 @@ function removeAmount(accountName, amount) {
       console.log(err);
     }
   );
-  console.log(
-    chalk.green(`Foi realizado saque no valor de R$${amount} da sua conta!`)
-  );
+
+  if (message) {
+    console.log(
+      chalk.green(`Foi realizado saque no valor de R$${amount} da sua conta!`)
+    );
+  }
 }
