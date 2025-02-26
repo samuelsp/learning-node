@@ -1,6 +1,7 @@
 const chalk = require("chalk");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const { parse } = require("path");
 
 operation();
 
@@ -199,14 +200,17 @@ function checkAccount(accountName) {
 
 function addAmount(accountName, amount, message = true) {
   const accountData = getAccount(accountName);
-  if (!amount) {
+  const amountNumber = parseFloat(amount);
+
+  if (amountNumber <= 0 || !amountNumber) {
     console.log(
       chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde.")
     );
     return;
   }
 
-  accountData.balance = parseFloat(accountData.balance) + parseFloat(amount);
+  accountData.balance =
+    parseFloat(accountData.balance) + parseFloat(amountNumber);
 
   fs.writeFileSync(
     `accounts/${accountName}.json`,
