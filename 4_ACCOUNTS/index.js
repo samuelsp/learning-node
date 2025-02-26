@@ -128,8 +128,13 @@ function transfer() {
             console.log(chalk.bgRed.black("Conta de destino não existe."));
             return transfer();
           }
-          addAmount(destinationAccount, amount, false);
-          removeAmount(accountName, amount, false);
+          let resultSucess = removeAmount(accountName, amount, false);
+
+          if (resultSucess) {
+            addAmount(destinationAccount, amount, false);
+          } else {
+            return transfer();
+          }
 
           console.log(
             chalk.green(
@@ -198,7 +203,7 @@ function addAmount(accountName, amount, message = true) {
     console.log(
       chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde.")
     );
-    return deposit();
+    return;
   }
 
   accountData.balance = parseFloat(accountData.balance) + parseFloat(amount);
@@ -298,7 +303,7 @@ function removeAmount(accountName, amount, message = true) {
   }
   if (accountData.balance < amount) {
     console.log(chalk.bgRed.black("Saldo insuficiente."));
-    return;
+    return false;
   }
   accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
 
@@ -315,4 +320,6 @@ function removeAmount(accountName, amount, message = true) {
       chalk.green(`Foi realizado saque no valor de R$${amount} da sua conta!`)
     );
   }
+
+  return true;
 }
