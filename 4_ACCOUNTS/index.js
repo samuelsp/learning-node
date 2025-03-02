@@ -200,17 +200,19 @@ function checkAccount(accountName) {
 
 function addAmount(accountName, amount, message = true) {
   const accountData = getAccount(accountName);
-  const amountNumber = parseFloat(amount);
 
-  if (amountNumber <= 0 || !amountNumber) {
+  if (parseFloat(amount) <= 0 || !parseFloat(amount)) {
     console.log(
       chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde.")
     );
     return;
   }
 
-  accountData.balance =
-    parseFloat(accountData.balance) + parseFloat(amountNumber);
+  if (accountData.balance == null) {
+    accountData.balance = 0;
+  }
+
+  accountData.balance = parseFloat(accountData.balance) + parseFloat(amount);
 
   fs.writeFileSync(
     `accounts/${accountName}.json`,
@@ -299,13 +301,14 @@ function withDraw() {
 
 function removeAmount(accountName, amount, message = true) {
   const accountData = getAccount(accountName);
-  if (!amount) {
+
+  if (parseFloat(amount) <= 0 || !parseFloat(amount)) {
     console.log(
       chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde.")
     );
-    return withDraw();
+    return;
   }
-  if (accountData.balance < amount) {
+  if (accountData.balance < parseFloat(amount)) {
     console.log(chalk.bgRed.black("Saldo insuficiente."));
     return false;
   }
