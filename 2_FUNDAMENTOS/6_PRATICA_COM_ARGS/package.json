@@ -1,0 +1,19 @@
+{
+  "name": "6_pratica_com_args",
+  "version": "1.0.0",
+  "description": "Leitura de argumentos e utilizando modulo externo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "args",
+    "minimist",
+    "module"
+  ],
+  "author": "Samuel",
+  "license": "ISC",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  }
+}
