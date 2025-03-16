@@ -1,0 +1,16 @@
+a {
+    color: blue;
+    font-size: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+h1 {
+    color: red;
+    font-size: 30px;
+}
+
+h2, h3 {
+    color: green;
+    font-size: 20px;
+}

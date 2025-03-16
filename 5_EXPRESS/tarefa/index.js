@@ -1,7 +1,8 @@
 const express = require("express");
-const app = express();
-const path = require("path");
 const users = require("./users");
+const path = require("path");
+const app = express();
+
 const port = 5000;
 
 const basePath = path.join(__dirname, "templates");
