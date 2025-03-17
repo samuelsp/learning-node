@@ -1,6 +1,6 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
-const mysql = require("mysql");
+const pool = require("./db/conn");
 
 const PORT = 3000;
 
@@ -27,7 +27,7 @@ app.post("/books/insertbook", (req, res) => {
   const title = req.body.title;
   const pages = req.body.pagesqty;
   const sql = `INSERT INTO books (title, pagesqty) VALUES ('${title}', ${pages})`;
-  conn.query(sql, (err) => {
+  pool.query(sql, (err) => {
     if (err) {
       console.log("Error inserting book: ", err.message);
       return;
@@ -38,7 +38,7 @@ app.post("/books/insertbook", (req, res) => {
 
 app.get("/books", (req, res) => {
   const sql = "SELECT * FROM books";
-  conn.query(sql, (err, data) => {
+  pool.query(sql, (err, data) => {
     if (err) {
       console.log("Error get data from database: ", err.message);
       return;
@@ -51,7 +51,7 @@ app.get("/books", (req, res) => {
 app.get("/books/:id", (req, res) => {
   const id = req.params.id;
   const sql = `SELECT * FROM books WHERE id = ${id}`;
-  conn.query(sql, (err, data) => {
+  pool.query(sql, (err, data) => {
     if (err) {
       console.log("Error the get data from database: ", err.message);
       return;
@@ -64,7 +64,7 @@ app.get("/books/:id", (req, res) => {
 app.get("/books/edit/:id", (req, res) => {
   const id = req.params.id;
   const sql = `SELECT * FROM books WHERE id = ${id}`;
-  conn.query(sql, (err, data) => {
+  pool.query(sql, (err, data) => {
     if (err) {
       console.log("Error the get data from database: ", err.message);
       return;
@@ -79,7 +79,7 @@ app.post("/books/updatebook", (req, res) => {
   const title = req.body.title;
   const pages = req.body.pagesqty;
   const sql = `UPDATE books SET title = '${title}', pagesqty = ${pages} WHERE id = ${id}`;
-  conn.query(sql, (err) => {
+  pool.query(sql, (err) => {
     if (err) {
       console.log("Error updating book: ", err.message);
       return;
@@ -91,7 +91,7 @@ app.post("/books/updatebook", (req, res) => {
 app.post("/books/remove/:id", (req, res) => {
   const id = req.params.id;
   const sql = `DELETE FROM books WHERE id = ${id}`;
-  conn.query(sql, (err) => {
+  pool.query(sql, (err) => {
     if (err) {
       console.log("Error deleting book: ", err.message);
       return;
@@ -100,22 +100,6 @@ app.post("/books/remove/:id", (req, res) => {
   });
 });
 
-const conn = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "admin@01",
-  database: "nodemysql",
-});
-
-conn.connect((err) => {
-  if (err) {
-    console.log("Error connecting to database: ", err.message);
-    return;
-  }
-  console.log("Connected to database");
-
-  app.listen(PORT, () => {
-    console.log("Server is running on http://localhost:3000");
-  });
+app.listen(PORT, () => {
+  console.log("Server is running on http://localhost:3000");
 });
