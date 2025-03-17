@@ -16,7 +16,6 @@ app.use(
 );
 
 app.use(express.json());
-
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
@@ -26,8 +25,9 @@ app.get("/", (req, res) => {
 app.post("/books/insertbook", (req, res) => {
   const title = req.body.title;
   const pages = req.body.pagesqty;
-  const sql = `INSERT INTO books (title, pagesqty) VALUES ('${title}', ${pages})`;
-  pool.query(sql, (err) => {
+  const sql = `INSERT INTO books (??, ??) VALUES (?, ?)`;
+  const data = ["title", "pagesqty", title, pages];
+  pool.query(sql, data, (err) => {
     if (err) {
       console.log("Error inserting book: ", err.message);
       return;
@@ -50,8 +50,9 @@ app.get("/books", (req, res) => {
 
 app.get("/books/:id", (req, res) => {
   const id = req.params.id;
-  const sql = `SELECT * FROM books WHERE id = ${id}`;
-  pool.query(sql, (err, data) => {
+  const sql = `SELECT * FROM books WHERE ?? = ?`;
+  const data = ["id", id];
+  pool.query(sql, data, (err, data) => {
     if (err) {
       console.log("Error the get data from database: ", err.message);
       return;
@@ -63,8 +64,9 @@ app.get("/books/:id", (req, res) => {
 
 app.get("/books/edit/:id", (req, res) => {
   const id = req.params.id;
-  const sql = `SELECT * FROM books WHERE id = ${id}`;
-  pool.query(sql, (err, data) => {
+  const sql = `SELECT * FROM books WHERE ?? = ?`;
+  const data = ["id", id];
+  pool.query(sql, data, (err, data) => {
     if (err) {
       console.log("Error the get data from database: ", err.message);
       return;
@@ -78,8 +80,9 @@ app.post("/books/updatebook", (req, res) => {
   const id = req.body.id;
   const title = req.body.title;
   const pages = req.body.pagesqty;
-  const sql = `UPDATE books SET title = '${title}', pagesqty = ${pages} WHERE id = ${id}`;
-  pool.query(sql, (err) => {
+  const sql = `UPDATE books SET ?? = ?, ?? = ? WHERE ?? = ?`;
+  const data = ["title", title, "pagesqty", pages, "id", id];
+  pool.query(sql, data, (err) => {
     if (err) {
       console.log("Error updating book: ", err.message);
       return;
@@ -90,8 +93,9 @@ app.post("/books/updatebook", (req, res) => {
 
 app.post("/books/remove/:id", (req, res) => {
   const id = req.params.id;
-  const sql = `DELETE FROM books WHERE id = ${id}`;
-  pool.query(sql, (err) => {
+  const sql = `DELETE FROM books WHERE ?? = ?`;
+  const data = ["id", id];
+  pool.query(sql, data, (err) => {
     if (err) {
       console.log("Error deleting book: ", err.message);
       return;
