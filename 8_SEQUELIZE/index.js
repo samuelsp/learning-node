@@ -6,6 +6,7 @@ const app = express();
 
 const conn = require("./db/conn");
 const User = require("./models/User");
+const Address = require("./models/Address");
 
 app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
@@ -17,12 +18,10 @@ app.use(
 );
 
 app.use(express.json());
-
 app.use(express.static("public"));
 
 app.get("/", async (req, res) => {
   const users = await User.findAll({ raw: true });
-  console.log(users);
   res.render("home", { users });
 });
 
@@ -39,8 +38,8 @@ app.get("/users/:id", async (req, res) => {
 
 app.get("/users/edit/:id", async (req, res) => {
   const id = req.params.id;
-  const user = await User.findOne({ raw: true, where: { id } });
-  res.render("useredit", { user });
+  const user = await User.findOne({ include: Address, where: { id: id } });
+  res.render("useredit", { user: user.get({ plain: true }) });
 });
 
 app.post("/users/create", async (req, res) => {
@@ -83,6 +82,30 @@ app.post("/users/update", async (req, res) => {
 
   await User.update(userData, { where: { id } });
   res.redirect("/");
+});
+
+app.post("/address/create", async (req, res) => {
+  const userId = req.body.userId;
+  const street = req.body.street;
+  const number = req.body.number;
+  const city = req.body.city;
+
+  const address = {
+    userId,
+    street,
+    number,
+    city,
+  };
+
+  await Address.create(address);
+  res.redirect(`/users/edit/${userId}`);
+});
+
+app.post("/address/delete/", async (req, res) => {
+  const id = req.body.id;
+  const userId = req.body.userId;
+  await Address.destroy({ where: { id: id } });
+  res.redirect(`/users/edit/${userId}`);
 });
 
 conn
