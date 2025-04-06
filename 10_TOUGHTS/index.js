@@ -46,21 +46,20 @@ app.use(
 
 app.use(flash());
 app.use(express.static("public"));
-
-app.use((req, res, next) => {
-  if (req.session.userid) {
-    res.locals.session = { userid: req.session.userid };
-  } else {
-    res.locals.session = {};
-  }
-  next();
-});
-
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+
+app.use((req, res, next) => {
+  if (!req.session.userid) {
+    res.locals.session = {};
+  }
+
+  res.locals.session = { userid: req.session.userid };
+  next();
+});
 
 app.use(express.json());
 app.use("/toughts", toughtsRoutes);

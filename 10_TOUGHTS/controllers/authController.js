@@ -10,6 +10,11 @@ module.exports = class AuthController {
     res.render("auth/register");
   }
 
+  static logout(req, res) {
+    req.session.destroy();
+    res.redirect("/login");
+  }
+
   static async registerPost(req, res) {
     const { name, email, password, confirmpassword } = req.body;
 
@@ -37,7 +42,6 @@ module.exports = class AuthController {
 
     try {
       const createdUser = await User.create(user);
-      console.log(createdUser);
       req.session.userid = createdUser.id;
 
       req.flash("message", "Cadastro realizado com sucesso!");
