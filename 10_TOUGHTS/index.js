@@ -11,6 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const conn = require("./db/conn");
 
+const checkAuth = require("./helpers/auth").checkAuth;
+
 // models
 const Tought = require("./models/Tought");
 const User = require("./models/User");
@@ -65,7 +67,7 @@ app.use(express.json());
 app.use("/toughts", toughtsRoutes);
 app.use("/", authRoutes);
 
-app.get("/", toughtsController.showToughts);
+app.get("/", checkAuth, toughtsController.showToughts);
 
 conn
   .sync()
