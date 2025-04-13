@@ -15,8 +15,6 @@ module.exports = class ToughtController {
 
     if (req.query.order === "old") {
       order = "ASC";
-    } else {
-      order = "DESC";
     }
 
     try {
