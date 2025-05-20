@@ -25,13 +25,24 @@ class Product {
   }
 
   static async getProductById(id) {
-    // if (!ObjectId.isValid(id)) {
-    //   return null;
-    // }
+    if (!ObjectId.isValid(id)) {
+      return null;
+    }
     const product = await conn
       .db()
       .collection("products")
       .findOne({ _id: new ObjectId(id) });
+    return product;
+  }
+
+  static async removeProductById(id) {
+    if (!ObjectId.isValid(id)) {
+      return null;
+    }
+    const product = await conn
+      .db()
+      .collection("products")
+      .deleteOne({ _id: new ObjectId(id) });
     return product;
   }
 }

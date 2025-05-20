@@ -28,4 +28,10 @@ module.exports = class ProductController {
     const product = await Product.getProductById(id);
     res.render("products/product", { product });
   }
+
+  static removeProduct(req, res) {
+    const id = req.params.id;
+    Product.removeProductById(id);
+    res.redirect("/");
+  }
 };
