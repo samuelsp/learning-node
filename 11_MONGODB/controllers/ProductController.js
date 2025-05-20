@@ -15,11 +15,8 @@ module.exports = class ProductController {
     const price = req.body.price;
     const image = req.body.image;
     const description = req.body.description;
-
     const product = new Product(name, price, image, description);
-
     product.save();
-
     res.redirect("/");
   }
 
@@ -29,9 +26,15 @@ module.exports = class ProductController {
     res.render("products/product", { product });
   }
 
-  static removeProduct(req, res) {
+  static async removeProduct(req, res) {
     const id = req.params.id;
-    Product.removeProductById(id);
+    await Product.removeProductById(id);
     res.redirect("/");
+  }
+
+  static async editProduct(req, res) {
+    const id = req.params.id;
+    const product = await Product.getProductById(id);
+    res.render("products/edit", { product });
   }
 };
