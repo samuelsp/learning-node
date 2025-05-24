@@ -45,6 +45,14 @@ class Product {
       .deleteOne({ _id: new ObjectId(id) });
     return product;
   }
+
+  updateProduct(id) {
+    conn
+      .db()
+      .collection("products")
+      .updateOne({ _id: new ObjectId(id) }, { $set: this });
+    return;
+  }
 }
 
 module.exports = Product;
