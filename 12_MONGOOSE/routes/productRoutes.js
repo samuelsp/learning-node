@@ -6,6 +6,7 @@ router.get("/", ProductController.showProducts);
 router.post("/edit", ProductController.editProductPost);
 router.post("/create", ProductController.createProductPost);
 router.get("/create", ProductController.createProduct);
+router.get("/favicon.ico", (req, res) => res.status(204).end());
 router.get("/:id", ProductController.getProduct);
 router.get("/edit/:id", ProductController.editProduct);
 router.post("/remove/:id", ProductController.removeProduct);
