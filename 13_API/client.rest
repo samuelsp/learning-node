@@ -1,0 +1,33 @@
+### Variables 
+@apiurl = http://localhost:3000
+
+### GET users
+GET {{apiurl}} HTTP/1.1
+
+### POST createProduct
+POST {{apiurl}}/createProduct HTTP/1.1
+Content-Type: application/json
+
+{
+   "name":"cadeira",
+   "price":"850"   
+}
+
+### POST createProduct
+POST {{apiurl}}/createProduct HTTP/1.1
+Content-Type: application/json
+
+{
+   
+   "price":"850"   
+}
+
+### POST createProduct
+POST {{apiurl}}/createProduct HTTP/1.1
+Content-Type: application/json
+
+{
+   "name": "cadeira"     
+}
+
+
