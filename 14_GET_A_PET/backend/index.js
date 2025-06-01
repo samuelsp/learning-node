@@ -12,6 +12,9 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.static("public"));
 
 // Routes
+const UserRoutes = require("./routes/UserRoutes");
+app.use("/users", UserRoutes);
+
 app.get("/", (req, res) => {
   res.json({ message: "GET A PET" });
 });
