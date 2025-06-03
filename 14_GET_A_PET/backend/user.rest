@@ -4,18 +4,38 @@
 ### GET users
 GET {{apiurl}} HTTP/1.1
 
-### POST createUser
+### POST register
 POST {{apiurl}}/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-   "name":"Samuel",
-   "email":"samuelspcunha@gmail.com",
-   "phone": "11977925700",
+   "name":"Joseph",
+   "email":"samp_01@hotmail.com",
+   "phone": "11977925701",
    "password": "teste123",
    "confirmPassword": "teste123"
 }
 
+
+### POST login
+POST {{apiurl}}/users/login HTTP/1.1
+Content-Type: application/json
+
+{   
+   "email": "samuelspcunha@gmail.com",
+   "password": "teste123"   
+}
+
+
+### GET user token
+GET {{apiurl}}/users/checkuser HTTP/1.1
+Content-Type: application/json
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU2FtdWVsIiwiaWQiOiI2ODNjOTg3ZGRiY2RlMjFhYTYwYjU0ODciLCJpYXQiOjE3NDg5MDk3NDZ9.KXHzPTPwQ_S3ZgqV-1AUNWGR2DQiyuD2i9PEEcrlbao
+
+
+### GET User By Id
+GET {{apiurl}}/users/683c987ddbcde21aa60b5487 HTTP/1.1
+Content-Type: application/json
 
 
 
